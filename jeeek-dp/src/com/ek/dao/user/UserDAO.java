@@ -113,20 +113,21 @@ public class UserDAO {
 		con = this.connectionFactory.getConnection("");
 		StringBuffer sb = new StringBuffer();
 		EkUser loginUser = null; 
-		sb.append("SELECT USERID, LOGNAME FROM EK_USER WHERE LOGNAME = ? AND PASSWORD = ?");
+		sb.append("SELECT USERID, LOGNAME, VALIDFLAG FROM EK_USER WHERE LOGNAME = ? AND PASSWORD = ?");
 
-		cryptUtil.setStr2MD5(user.getPassWord());
-		String passWord = cryptUtil.get_MD5Str();
+		//cryptUtil.setStr2MD5(user.getPassWord());
+		//String passWord = cryptUtil.get_MD5Str();
 		PreparedStatement ps = con.prepareStatement(sb.toString());
 		ps.setString(1, user.getLogName());
-		ps.setString(2, passWord);
+		ps.setString(2, user.getPassWord());
 		
-		logger.info(sb.toString()+" ,1:"+user.getLogName()+",2:"+passWord);
+		logger.info(sb.toString()+" ,1:"+user.getLogName()+",2:"+user.getPassWord());
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			loginUser = new EkUser();
 			loginUser.setUserId(rs.getInt("USERID"));
 			loginUser.setLogName(rs.getString("LOGNAME"));
+			loginUser.setValidFlag(rs.getString("VALIDFLAG"));
 		}
 		
 		return loginUser;
