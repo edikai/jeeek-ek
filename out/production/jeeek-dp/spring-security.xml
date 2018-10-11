@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:security="http://www.springframework.org/schema/security"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<security:global-method-security pre-post-annotations="enabled"/>
+	
+	<!-- 配置不需要验证的资源 -->
+	<security:http pattern="/js/**" security="none"/>
+	<security:http pattern="/css/**" security="none"/>
+	<security:http pattern="/image/**" security="none"/>
+	
+	<security:http use-expressions="true" auto-config="true" access-denied-page="/auth/denied.html">
+		<security:intercept-url pattern="/auth/login.html" access="permitAll"/>
+		<security:intercept-url pattern="/main/admin.html" access="hasRole('ROLE_ADMIN')"/>
+		<security:intercept-url pattern="/main/common.html" access="hasRole('ROLE_USER')"/>
+		
+		<!-- 
+		* login-page 自定义登陆页面
+		* authentication-failure-url 登陆失败跳转页面
+		* default-target-url 登陆成功跳转页面
+		 -->
+		<security:form-login 
+			login-page="/auth/login.html" 
+			authentication-failure-url="/auth/login.html?error=true"
+			default-target-url="/main/common.html"/>
+		<security:logout
+			invalidate-session="true"
+			logout-success-url="/auth/login.html"
+			logout-url="/auth/logout.html"/>
+	</security:http>
+	
+	<!-- 配置用户管理 -->
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="customUserDetailsService">
+			<security:password-encoder ref="passwordEncoder"/>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	<!-- 对密码进行MD5编码 -->  
+	<bean class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" id="passwordEncoder"/> 
+	<!-- 指定中文资源 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource" />
+	
+	<bean id="customUserDetailsService" class="com.ek.services.secutest.CustomUserDetailsService"/>
+	
+</beans>
+
+
+

@@ -1,0 +1,49 @@
+body {
+	padding-top: 40px;
+	padding-bottom: 40px;
+	background-color: #eee;
+}
+.loginForm {
+	max-width: 600px;
+	padding: 100px;
+	margin: 0 auto;
+}
+.loginForm .form-signin-heading, .loginForm .checkbox {
+	margin-bottom: 10px;
+}
+.loginForm .checkbox {
+	font-weight: normal;
+}
+.loginForm .form-control {
+	position: relative;
+	height: auto;
+	-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	padding: 10px;
+	font-size: 14px;
+}
+.loginForm .form-control:focus {
+  z-index: 2;
+}
+.loginForm input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.loginForm input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.loginForm table tbody tr th{
+}
+.bot_but{
+	text-align: center;
+}
+.submit{
+	display: inline;
+	width: 40%;
+	margin-top: 2px;
+}
+
