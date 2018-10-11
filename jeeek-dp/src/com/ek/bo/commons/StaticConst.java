@@ -28,4 +28,7 @@ public class StaticConst {
 	public final static String PAGE_EK_PAGE_ACCESS = "1";
 	
 	public final static String TAB_EK_USER_PERMISSION_MAPPING = "EK_USER_PERMISSION_MAPPING";
+	
+	public final static String EK_RETURN_PAGE_PWD_ERROR = "登录失败，请检查你的用户名密码";
+	public final static String EK_RETURN_PAGE_PWD_INVALID = "登录失败，用户信息已失效";
 }
