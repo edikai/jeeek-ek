@@ -9,12 +9,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ek.bo.commons.StaticConst;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,32 +45,51 @@ public class LoginController {
 
 	private Logger logger = Logger.getLogger(this.getClass());
 	private CryptUtil cryptUtil = new CryptUtil();
+	
+	/**
+	* 登陆操作
+	* @param
+	* @Return:
+	* @Author: Qin_HQing
+	* @Date: 2018/10/11 11:15
+	* @Description:
+	**/
 	@RequestMapping("/login.html")
-	public ModelAndView login(EkUser user, HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView login(@ModelAttribute("user")EkUser user, HttpServletRequest request,
+	                          HttpServletResponse response) {
+		
 		EkUser loginUser = null;
 		ModelAndView mav = null;
 		String clientTime = request.getParameter("nowTime");
 		String rembme = request.getParameter("rembme");
-		this.cryptUtil.setKey("ek_pwd");
+		String pwdChanged = request.getParameter("pwdChanged");
+		
+		boolean pwdC = (pwdChanged == null || pwdChanged.trim().length()<=0) ? false : true;
 
 		long[] it = DateUtil.getDateTimeInterval(new Date(), clientTime);
 		try {
-			if (null != rembme && rembme.equals("true")) {
+			
+			if (!pwdC){//密码未出现改动，则取cookie中的值作比较
 				String li = CookieUtil.getCookie("loginInfo", request);
 				if (null != li) {
-					this.cryptUtil.setDesString(li.split(",")[1]);;
-					user.setPassWord(this.cryptUtil.getStrMing());
+					user.setPassWord(li.split(",")[1]);
 				}
+			}else {//密码出现改动，则加密后比较
+				cryptUtil.setStr2MD5(user.getPassWord());
+				user.setPassWord(cryptUtil.get_MD5Str());
 			}
+			
 			loginUser = this.loginService.loginUser(user);
 			if (null != loginUser) {
+				if (loginUser.getValidFlag().equals("0")){
+					request.getSession().setAttribute("error", StaticConst.EK_RETURN_PAGE_PWD_INVALID);
+					mav = new ModelAndView("/login/login");
+					return mav;
+				}
 				request.getSession().setAttribute("loginUser", loginUser);
-				request.getSession().setAttribute("error", "0");
 				request.getSession().setAttribute("timeIntv", it);
 				
-				this.cryptUtil.setEncString(user.getPassWord());
-				String pwd = this.cryptUtil.getStrMi();
+				String pwd = user.getPassWord();
 				if (null != rembme && rembme.equals("true")) {
 					CookieUtil.addCookie("loginInfo", user.getLogName()
 							+ "," + pwd, 7 * 24 * 60 * 60,
@@ -75,9 +97,10 @@ public class LoginController {
 				}else {
 					CookieUtil.destroyCookie("loginInfo", response, request);
 				}
-				mav = new ModelAndView("/login/loginSuc");
+				//mav = new ModelAndView("/login/loginSuc");
+				mav = new ModelAndView("/login/bootstrap");
 			} else {
-				request.getSession().setAttribute("error", "1");
+				request.getSession().setAttribute("error", StaticConst.EK_RETURN_PAGE_PWD_ERROR);
 				mav = new ModelAndView("/login/login");
 			}
 
@@ -89,11 +112,9 @@ public class LoginController {
 	}
 
 	@RequestMapping("/toLogin.html")
-	public ModelAndView toLogin(HttpServletRequest request) {
-		ModelAndView mav = null;
+	public String toLogin(HttpServletRequest request) {
 		request.getSession().setAttribute("error", null);
-		mav = new ModelAndView("/login/login");
-		return mav;
+		return "/login/login";
 	}
 
 	@RequestMapping("/appLogin.html")
@@ -165,13 +186,6 @@ public class LoginController {
 		ModelAndView mav = null;
 		mav = new ModelAndView("/login/bottom");
 		return mav;
-	}
-
-	public static void main(String[] args) {
-		List<String> a = new ArrayList<String>();
-		a.add("a");
-		a.add("d");
-		System.out.println(a.toString());
 	}
 
 	private LoginServiceI loginService;
