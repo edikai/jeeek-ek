@@ -8,13 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<%@ page pageEncoding="UTF-8" %>
 	
-	<%@include file="../../jsp/common.jsp"%>
+	<%@include file="../../static/jsp/common.jsp"%>
 
 	<title>欢迎使用JEEEK-DP开发平台</title>
 
-	<link href="${pageContext.request.contextPath}/css/xcom/login/login.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/static/css/xcom/login/login.css" rel="stylesheet">
 
-	<script type="text/javascript" src="${pageContext.request.contextPath}/js/common/EK.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/common/EK.js"></script>
 	<style>
 
 	</style>
@@ -75,5 +75,5 @@
 	</div>
 </form>
 </body>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/xcom/loginJs.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/xcom/loginJs.js"></script>
 </html>
