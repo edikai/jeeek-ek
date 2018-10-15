@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.ek.entry.menu.EKMenu;
+import com.ek.entry.menu.TreeEKMenu;
 import com.ek.services.commons.EkService;
 
 /**
@@ -16,5 +17,13 @@ import com.ek.services.commons.EkService;
  */
 public abstract class MenuServiceI implements EkService{
 
-	public abstract List<EKMenu> getUserMenuList(List<String> permList) throws SQLException;
+	/**
+	* 用于递归获取用户菜单
+	* @param
+	* @Return:
+	* @Author: Qin_HQing
+	* @Date: 2018/10/15 16:36
+	* @Description:
+	**/
+	public abstract List<TreeEKMenu> getUserMenuList(List<String> permList) throws SQLException;
 }

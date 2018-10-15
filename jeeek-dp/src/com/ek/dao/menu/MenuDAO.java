@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,8 @@ import com.ek.entry.menu.EKMenu;
 @Component
 public class MenuDAO {
 
+	private Logger log = Logger.getLogger(MenuDAO.class);
+	
 	private Connection conn = null;
 	private ConnectionFactory connectionFactory;
 	
@@ -104,7 +107,7 @@ public class MenuDAO {
 		conn = this.connectionFactory.getConnection("");
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery(sql);
-		System.out.println("[+++]"+sql);
+		log.debug("[getMenuIds sql] : "+sql);
 		while (rs.next()) {
 			list.add(rs.getString(colName));
 		}

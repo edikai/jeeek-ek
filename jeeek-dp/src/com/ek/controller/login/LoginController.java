@@ -1,5 +1,6 @@
 package com.ek.controller.login;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ek.bo.commons.StaticConst;
+import com.ek.controller.commons.EKController;
+import com.ek.entry.menu.TreeEKMenu;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -41,7 +44,7 @@ import com.ek.services.resource.ResourceServiceI;
  */
 @Controller
 @RequestMapping("/xcom")
-public class LoginController {
+public class LoginController extends EKController {
 
 	private Logger logger = Logger.getLogger(this.getClass());
 	private CryptUtil cryptUtil = new CryptUtil();
@@ -159,9 +162,7 @@ public class LoginController {
 	}
 
 	@RequestMapping("/toLeft.html")
-	public ModelAndView toLeft(HttpServletRequest request) {
-		ModelAndView mav = null;
-		mav = new ModelAndView("/login/left");
+	public ModelAndView toLeft(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			EkUser lUser = (EkUser) request.getSession().getAttribute(
 					"loginUser");
@@ -169,16 +170,16 @@ public class LoginController {
 			List<String> permList = this.permService.getPermIDList(logId);
 			List<Map<String, String>> resList = this.resouService
 					.getResourceByPermId(permList);
-			List<EKMenu> mList = this.menuService.getUserMenuList(permList);
+			List<TreeEKMenu> mList = this.menuService.getUserMenuList(permList);
 			JSONArray jaMList = JSONArray.fromObject(mList);
-			JSONArray jaRList = JSONArray.fromObject(resList);
+			logger.info(jaMList.toString());
 			request.setAttribute("menuList", jaMList.toString());
-			request.setAttribute("resList", jaRList.toString());
+			
+			super.printTEXT(jaMList.toString(), response);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return mav;
+		return null;
 	}
 
 	@RequestMapping("/toBottom.html")

@@ -1,8 +1,10 @@
 package com.ek.services.menu;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ek.entry.menu.TreeEKMenu;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -96,34 +98,10 @@ public class MenuService extends MenuServiceI {
 	}
 
 	@Override
-	public List<EKMenu> getUserMenuList(List<String> permList) throws SQLException {
-		String mids = permList.toString().substring(1, permList.toString().length()-1);
-		StringBuffer sbSQL = new StringBuffer("")
-			.append("SELECT MENUID FROM EK_MENU M WHERE M.VALIDFLAG = '1' AND  PERMSNID IN (")
-			.append(mids)
-			.append(") ");
-		List<String> midList = this.menuDAO.getMenuIds(sbSQL.toString(), "MENUID");
-		String tempIds = midList.toString().substring(1, midList.toString().length()-1);
-		while (true) {
-			StringBuilder sb = new StringBuilder()
-				.append("SELECT DISTINCT PARMENUID FROM EK_MENU M WHERE M.VALIDFLAG = '1' AND MENUID IN (")
-				.append(tempIds)
-				.append(")");
-			List<String> ids = this.menuDAO.getMenuIds(sb.toString(), "PARMENUID");
-			tempIds = ids.toString().substring(1, ids.toString().length()-1);
-			midList.addAll(ids);
-			if (ids.size() == 1 && ids.get(0).equals("1")) {
-				break;
-			}
-		}
-		StringBuilder sql = new StringBuilder()
-			.append("SELECT * FROM EK_MENU WHERE VALIDFLAG = '1' AND MENUID IN(")
-			.append(midList.toString().substring(1, midList.toString().length()-1))
-			.append(")");
-		log.info(sql.toString());
-		List<EKMenu> mList = this.menuDAO.getMenuListBySQL(sql.toString());
+	public List<TreeEKMenu> getUserMenuList(List<String> permList) throws SQLException {
+		String pids = permList.toString().substring(1, permList.toString().length()-1);
 		
-		return mList;
+		return this.getTreeEKMenu(0, pids);
 	}
 	
 	/**
@@ -139,6 +117,28 @@ public class MenuService extends MenuServiceI {
 		this.log.info("****"+sbSQL.toString());
 		List<EKMenu> list = this.menuDAO.getMenuListBySQL(sbSQL.toString());
 		return list;
+	}
+	
+	private List<TreeEKMenu> getTreeEKMenu(int parMenuId, String permIds) throws SQLException {
+		List<TreeEKMenu> treeMenus = new ArrayList<>();
+		
+		StringBuilder tempSql = new StringBuilder();
+		tempSql.append("SELECT * FROM EK_MENU WHERE VALIDFLAG = '1' AND PERMSNID IN(")
+			.append(permIds)
+			.append(") AND PARMENUID = ").append(parMenuId)
+		;
+		
+		List<EKMenu> mList = this.menuDAO.getMenuListBySQL(tempSql.toString());
+		for (EKMenu menu : mList){
+			TreeEKMenu treeEKMenu = new TreeEKMenu();
+			treeEKMenu.setText(menu.getMenuName());
+			treeEKMenu.setNodes(getTreeEKMenu(menu.getMenuId(), permIds));
+			treeEKMenu.setPermsnId(menu.getPermsnId());
+			
+			treeMenus.add(treeEKMenu);
+		}
+		
+		return treeMenus;
 	}
 
 }
