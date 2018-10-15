@@ -39,6 +39,10 @@ EK.prototype.showTime = function(timeIntv){
 	setTimeout("showTime()", 1000);
 }
 
+EK.prototype.isEmpty = function (obj) {
+	return null == obj ? true : (obj.length <= 0 ? true : false);
+}
+
 
 
 
