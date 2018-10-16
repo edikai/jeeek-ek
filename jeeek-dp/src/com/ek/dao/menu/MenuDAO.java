@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ek.entry.menu.EkMenu;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 import com.ek.bo.commons.DateUtil;
 import com.ek.bo.commons.StaticConst;
 import com.ek.conn.factory.ConnectionFactory;
-import com.ek.entry.menu.EKMenu;
+import com.ek.entry.menu.EkMenu;
 
 /**
  * @包名   com.ek.dao.resource
@@ -47,13 +48,13 @@ public class MenuDAO {
 	*@date 2015年5月27日 下午2:11:04
 	*@comment
 	 */
-	public List<EKMenu> getMenuListBySQL(String strSQL) throws SQLException {
-		List<EKMenu> list = new ArrayList<EKMenu>();
+	public List<EkMenu> getMenuListBySQL(String strSQL) throws SQLException {
+		List<EkMenu> list = new ArrayList<EkMenu>();
 		conn = connectionFactory.getConnection("");
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery(strSQL);
 		while (rs.next()) {
-			EKMenu menu = new EKMenu();
+			EkMenu menu = new EkMenu();
 			//menu.setCreateTime(rs.getDate("CREATETIME"));
 			menu.setCreateUserId(rs.getInt("CREATEUSERID"));
 			menu.setRemark(rs.getString("REMARK"));
@@ -78,7 +79,7 @@ public class MenuDAO {
 	*@date 2015年5月27日 下午3:19:14
 	*@comment
 	 */
-	public boolean add(EKMenu menu) throws SQLException {
+	public boolean add(EkMenu menu) throws SQLException {
 		boolean rbl = false;
 		conn = this.connectionFactory.getConnection("");
 		StringBuffer sbSQL = new StringBuffer("")
@@ -112,5 +113,20 @@ public class MenuDAO {
 			list.add(rs.getString(colName));
 		}
 		return list;
+	}
+	
+	public String getMenuUrl(Integer pId) throws SQLException {
+		String url = null;
+		StringBuilder sbSQL = new StringBuilder();
+		sbSQL.append("SELECT RESOURCEURL FROM EK_RESOURCE R LEFT JOIN EK_PERMISSION P ON R.ResourceId = P.RESOURCEID ")
+				.append("WHERE P.PERMSNID = ? ");
+		PreparedStatement pst = conn.prepareStatement(sbSQL.toString());
+		pst.setInt(1, pId);
+		ResultSet rs = pst.executeQuery();
+		while (rs.next()){
+			url = rs.getString("RESOURCEURL");
+		}
+		
+		return url;
 	}
 }

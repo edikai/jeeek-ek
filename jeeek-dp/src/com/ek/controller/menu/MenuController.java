@@ -4,17 +4,24 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.ek.controller.commons.EKController;
+import com.ek.entry.commons.JSONMsg;
 import net.sf.json.JSONArray;
 
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import net.sf.json.util.PropertyFilter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ek.bo.commons.StaticConst;
-import com.ek.entry.menu.EKMenu;
+import com.ek.entry.menu.EkMenu;
 import com.ek.entry.permission.EkPermission;
 import com.ek.entry.permission.EkResource;
 import com.ek.entry.user.EkUser;
@@ -31,7 +38,7 @@ import com.ek.services.permission.PermissionService;
  */
 @Component
 @RequestMapping("/menu")
-public class MenuController {
+public class MenuController extends EKController {
 
 	Logger logger = Logger.getLogger(this.getClass());
 	
@@ -45,7 +52,7 @@ public class MenuController {
 		//String menuId = (String) request.getAttribute("menuId");
 		String menuId = request.getParameter("menuId");
 		try {
-			List<EKMenu> list = this.menuService.getMenuListBySub(menuId);
+			List<EkMenu> list = this.menuService.getMenuListBySub(menuId);
 			request.setAttribute(StaticConst.PAGE_EK_PAGE_FLAG, StaticConst.PAGE_EK_PAGE_ACCESS);
 			if (null != list && !list.isEmpty()) {
 				request.setAttribute(StaticConst.EK_RETURN_FLAG, StaticConst.EK_RETURN_SUCCESS);
@@ -92,7 +99,7 @@ public class MenuController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/toAdd.html")
-	public ModelAndView add(EKMenu menu, HttpServletRequest request) {
+	public ModelAndView add(EkMenu menu, HttpServletRequest request) {
 		ModelAndView mav = null;
 		mav = new ModelAndView("/menu/toAddInit");
 		try {
@@ -136,7 +143,7 @@ public class MenuController {
 			
 			request.setAttribute("menuList", ja.toString());
 			request.setAttribute("permList", jPermList.toString());
-			request.setAttribute("menu", new EKMenu());
+			request.setAttribute("menu", new EkMenu());
 			
 		} catch (SQLException e) {
 			logger.error(e);
@@ -146,7 +153,7 @@ public class MenuController {
 	}
 	
 	@RequestMapping("/toAddSubMenu.html")
-	public ModelAndView addSubMenu(EKMenu menu, HttpServletRequest request) {
+	public ModelAndView addSubMenu(EkMenu menu, HttpServletRequest request) {
 		ModelAndView mav = null;
 		mav = new ModelAndView("/menu/toAddSubMenuInit");
 		try {
@@ -186,7 +193,7 @@ public class MenuController {
 			JSONArray jPermList = JSONArray.fromObject(permList);
 			
 			request.setAttribute("permList", jPermList.toString());
-			request.setAttribute("menu", new EKMenu());
+			request.setAttribute("menu", new EkMenu());
 			request.setAttribute("parMenuId", parMenuId);
 			
 		} catch (SQLException e) {
@@ -194,6 +201,29 @@ public class MenuController {
 			e.printStackTrace();
 		}
 		return mav;
+	}
+	
+	@RequestMapping("/getMenuUrl.html")
+	public ModelAndView getMenuUrl(@RequestParam(value = "permsnId")Integer pId, HttpServletResponse response){
+		try {
+			JSONMsg msg = new JSONMsg();
+			if (null == pId){
+				msg.setCode(StaticConst.EK_RETURN_ERROR);
+				msg.setMsg(StaticConst.EK_RETURN_MSG_ERR_NOPARAM);
+			}
+			String menuUrl = this.menuService.getMenuUrl(pId);
+			
+			msg.setCode(StaticConst.EK_RETURN_SUCCESS);
+			msg.setData(menuUrl);
+			
+			JSONObject rt = JSONObject.fromObject(msg);
+			super.printTEXT(rt.toString(), response);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	@Autowired

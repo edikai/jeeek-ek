@@ -44,7 +44,7 @@
 					<li style="margin-top: 8px;">
 						<img class="img-circle"
 							 style="cursor: pointer;" alt=""
-							 src="${pageContext.request.contextPath}/image/login/user.jpg" onclick="showOper()">
+							 src="${pageContext.request.contextPath}/static/image/login/user.jpg" onclick="showOper()">
 					</li>
 					<li><a href="#" onclick="showOper()">
 						${pageContext.request.session.getAttribute("loginUser").logName}
@@ -64,33 +64,11 @@
 			</div>
 
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">Dashboard</h1>
+				<div class="page-header">Dashboard</div>
 
-				<div class="row placeholders">
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
+				<div id="mainpage" class="row placeholders">
 				</div>
 
-				<h2 class="sub-header">Section title</h2>
-				<%=time %>
 			</div>
 		</div>
 	</div>
@@ -111,8 +89,9 @@
 						data: msg,
 						onNodeSelected: function (event, data) {
 							var selectedNode = $('#treemenu').treeview('getSelected');
+							console.info(selectedNode)
 							var permsnId = selectedNode[0].permsnId;
-							getPermsnUrl(permsnId);
+							getMenuUrl(permsnId);
 						}
 					});
 				}
@@ -120,13 +99,13 @@
 
 		});
 
-		function getPermsnUrl(permsnId) {
+		function getMenuUrl(permsnId) {
 			if (EK.isEmpty(permsnId) ) {
-				throw DOMException("getPermsnUrl param[permsnId] is null or empty.");
+				throw DOMException("getMenuUrl param[permsnId] is null or empty.");
 			}
 			$.ajax({
 				type: 'post',
-				url: path+'/permission',
+				url: path+'/menu/getMenuUrl.html',
 				data: 'permsnId='+permsnId,
 				success: function (msg) {
 					console.info(msg)

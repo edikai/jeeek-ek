@@ -1,9 +1,10 @@
-<%@page import="com.ek.entry.menu.EKMenu"%>
+<%@page import="com.ek.entry.menu.EkMenu"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
+	<%@ page import="com.ek.entry.menu.EkMenu" %>
+		<%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-EKMenu menu = (EKMenu)request.getAttribute("menu");
+EkMenu menu = (EkMenu)request.getAttribute("menu");
 String ml = (String)request.getAttribute("menuList");
 String permLists = (String)request.getAttribute("permList");
 %>
@@ -13,10 +14,10 @@ String permLists = (String)request.getAttribute("permList");
 <head>
 	<base href="<%=basePath%>">
 	<title>菜单维护</title>
-	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/zTree/zTreeStyle.css">
-	<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.9.1.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/js/json2.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/js/zTree/jquery.ztree.all-3.5.js"></script>
+	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/zTree/zTreeStyle.css">
+	<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/json2.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/static/js/zTree/jquery.ztree.all-3.5.js"></script>
 </head>
 <script type="text/javascript">
 	var path = "<%=request.getContextPath() %>";

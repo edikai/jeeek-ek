@@ -3,6 +3,7 @@ package com.ek.services.permission;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.ek.entry.permission.EkPermission;
 import com.ek.services.commons.EkService;
 
 /**
@@ -13,8 +14,16 @@ import com.ek.services.commons.EkService;
  * @版本 V 1.0
  * @描述
  */
-public abstract class PermissionServiceI implements EkService{
+public interface PermissionServiceI extends EkService{
 
-	public abstract List<String> getPermIDList(int logId)  throws SQLException;
-
+	/**
+	* 根据登陆用户ID获取其对应的权限
+	* @param
+	* @Return:
+	* @Author: Qin_HQing
+	* @Date: 2018/10/16 9:46
+	* @Description:
+	**/
+	List<String> getPermIDList(int logId)  throws SQLException;
+	
 }

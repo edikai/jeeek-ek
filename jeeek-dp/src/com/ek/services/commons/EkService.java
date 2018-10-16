@@ -15,14 +15,15 @@ public interface EkService {
 
 	/**
 	 * @description 根据ID获取对象信息
-	 * @param userId
+	 * @param objId
 	 * @return User
 	 */
-	public Object getObject(int objId);
+	public Object getObject(int objId) throws SQLException;
 	
 	/**
 	 * @description 根据指定信息获取对象信息
-	 * @param args
+	 * @param colName
+	 * @param colValue
 	 * @return User
 	 */
 	public List<?> getList(String[] colName, String[] colValue) throws SQLException;
@@ -35,7 +36,7 @@ public interface EkService {
 	
 	/**
 	 * @description 新增对象信息
-	 * @param user
+	 * @param object
 	 * @return boolean
 	 * @throws SQLException 
 	 */
@@ -43,21 +44,21 @@ public interface EkService {
 	
 	/**
 	 * @description 删除对象信息
-	 * @param user
+	 * @param object
 	 * @return boolean
 	 */
 	public boolean remove(Object object);
 	
 	/**
 	 * @description 根据对象Id删除对象信息
-	 * @param userId
+	 * @param objId
 	 * @return boolean
 	 */
 	public boolean remove(int objId);
 	
 	/**
 	 * @description 更新对象信息
-	 * @param user
+	 * @param object
 	 * @return boolean
 	 */
 	public boolean update(Object object);

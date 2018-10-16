@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ek.entry.menu.TreeEKMenu;
+import com.ek.entry.menu.TreeEkMenu;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 
 import com.ek.dao.menu.MenuDAO;
-import com.ek.entry.menu.EKMenu;
+import com.ek.entry.menu.EkMenu;
 
 /**
  * @包名   com.ek.services.menu
@@ -25,7 +25,7 @@ import com.ek.entry.menu.EKMenu;
  * @描述
  */
 @Component
-public class MenuService extends MenuServiceI {
+public class MenuService implements MenuServiceI {
 
 	private Logger log = Logger.getLogger(this.getClass());
 	private MenuDAO menuDAO;
@@ -36,8 +36,7 @@ public class MenuService extends MenuServiceI {
 	}
 
 	@Override
-	public Object getObject(int objId) {
-		// TODO Auto-generated method stub
+	public Object getObject(int objId) throws SQLException{
 		return null;
 	}
 
@@ -53,7 +52,7 @@ public class MenuService extends MenuServiceI {
 			
 		}
 		log.info(sbSQL.toString());
-		List<EKMenu> list = this.menuDAO.getMenuListBySQL(sbSQL.toString());
+		List<EkMenu> list = this.menuDAO.getMenuListBySQL(sbSQL.toString());
 		return list;
 	}
 
@@ -69,10 +68,10 @@ public class MenuService extends MenuServiceI {
 	@Override
 	public boolean add(Object object) throws SQLException {
 		boolean rbl = false;
-		EKMenu menu = (EKMenu) object;
+		EkMenu menu = (EkMenu) object;
 		String[] colName = {"MENUNAME"};
 		String[] colValue = {menu.getMenuName() };
-		List<EKMenu> list = (List<EKMenu>) this.getList(colName, colValue);
+		List<EkMenu> list = (List<EkMenu>) this.getList(colName, colValue);
 		if (null == list || list.isEmpty()) {
 			rbl = this.menuDAO.add(menu);
 		}
@@ -98,10 +97,15 @@ public class MenuService extends MenuServiceI {
 	}
 
 	@Override
-	public List<TreeEKMenu> getUserMenuList(List<String> permList) throws SQLException {
+	public List<TreeEkMenu> getUserMenuList(List<String> permList) throws SQLException {
 		String pids = permList.toString().substring(1, permList.toString().length()-1);
 		
 		return this.getTreeEKMenu(0, pids);
+	}
+	
+	@Override
+	public String getMenuUrl(Integer pId) throws SQLException {
+		return this.menuDAO.getMenuUrl(pId);
 	}
 	
 	/**
@@ -110,17 +114,17 @@ public class MenuService extends MenuServiceI {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<EKMenu> getMenuListBySub(String menuId) throws SQLException {
+	public List<EkMenu> getMenuListBySub(String menuId) throws SQLException {
 		StringBuilder sbSQL = new StringBuilder("")
 			.append("SELECT * FROM EK_MENU M WHERE M.PARMENUID = ")
 			.append(menuId).append(" AND M.VALIDFLAG = '1' ");
 		this.log.info("****"+sbSQL.toString());
-		List<EKMenu> list = this.menuDAO.getMenuListBySQL(sbSQL.toString());
+		List<EkMenu> list = this.menuDAO.getMenuListBySQL(sbSQL.toString());
 		return list;
 	}
 	
-	private List<TreeEKMenu> getTreeEKMenu(int parMenuId, String permIds) throws SQLException {
-		List<TreeEKMenu> treeMenus = new ArrayList<>();
+	private List<TreeEkMenu> getTreeEKMenu(int parMenuId, String permIds) throws SQLException {
+		List<TreeEkMenu> treeMenus = new ArrayList<>();
 		
 		StringBuilder tempSql = new StringBuilder();
 		tempSql.append("SELECT * FROM EK_MENU WHERE VALIDFLAG = '1' AND PERMSNID IN(")
@@ -128,11 +132,13 @@ public class MenuService extends MenuServiceI {
 			.append(") AND PARMENUID = ").append(parMenuId)
 		;
 		
-		List<EKMenu> mList = this.menuDAO.getMenuListBySQL(tempSql.toString());
-		for (EKMenu menu : mList){
-			TreeEKMenu treeEKMenu = new TreeEKMenu();
+		List<EkMenu> mList = this.menuDAO.getMenuListBySQL(tempSql.toString());
+		for (EkMenu menu : mList){
+			TreeEkMenu treeEKMenu = new TreeEkMenu();
 			treeEKMenu.setText(menu.getMenuName());
-			treeEKMenu.setNodes(getTreeEKMenu(menu.getMenuId(), permIds));
+			List<TreeEkMenu> list = getTreeEKMenu(menu.getMenuId(), permIds);
+			if (null != list && !list.isEmpty())
+				treeEKMenu.setNodes(list);
 			treeEKMenu.setPermsnId(menu.getPermsnId());
 			
 			treeMenus.add(treeEKMenu);

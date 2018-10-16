@@ -1,8 +1,6 @@
 package com.ek.controller.login;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ek.bo.commons.StaticConst;
 import com.ek.controller.commons.EKController;
-import com.ek.entry.menu.TreeEKMenu;
+import com.ek.entry.menu.TreeEkMenu;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import net.sf.json.JsonConfig;
+import net.sf.json.util.PropertyFilter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ek.bo.commons.CookieUtil;
 import com.ek.bo.commons.CryptUtil;
 import com.ek.bo.commons.DateUtil;
-import com.ek.entry.menu.EKMenu;
 import com.ek.entry.user.EkUser;
 import com.ek.services.login.LoginService;
 import com.ek.services.login.LoginServiceI;
@@ -170,8 +168,16 @@ public class LoginController extends EKController {
 			List<String> permList = this.permService.getPermIDList(logId);
 			List<Map<String, String>> resList = this.resouService
 					.getResourceByPermId(permList);
-			List<TreeEKMenu> mList = this.menuService.getUserMenuList(permList);
-			JSONArray jaMList = JSONArray.fromObject(mList);
+			List<TreeEkMenu> mList = this.menuService.getUserMenuList(permList);
+			JsonConfig jsonConfig = new JsonConfig();
+			PropertyFilter filter = new PropertyFilter() {
+				public boolean apply(Object object, String fieldName, Object fieldValue) {
+					return null == fieldValue;
+				}
+			};
+			jsonConfig.setJsonPropertyFilter(filter);
+			
+			JSONArray jaMList = JSONArray.fromObject(mList, jsonConfig);
 			logger.info(jaMList.toString());
 			request.setAttribute("menuList", jaMList.toString());
 			

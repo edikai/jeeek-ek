@@ -22,16 +22,15 @@ import com.ek.entry.permission.EkPermission;
  * @描述
  */
 @Component("permService")
-public class PermissionService extends PermissionServiceI {
+public class PermissionService implements PermissionServiceI {
 
 	Logger logger = Logger.getLogger(this.getClass());
 	private PermissionDAO permDAO;
 	private UserPermDAO userPermDAO;
 
 	@Override
-	public Object getObject(int objId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object getObject(int objId) throws SQLException {
+		return this.permDAO.getPerm(objId);
 	}
 
 	@Override
@@ -118,8 +117,8 @@ public class PermissionService extends PermissionServiceI {
 	}
 
 	@Override
-	public List<String> getPermIDList(int logId) throws SQLException {
-		return this.permDAO.getPermIDList(logId);
+	public List<String> getPermIDList(int logUserId) throws SQLException {
+		return this.permDAO.getPermIDList(logUserId);
 	}
 	
 	public boolean revokePermFromUser(String userId, String[] pids, int logUserId) throws SQLException {

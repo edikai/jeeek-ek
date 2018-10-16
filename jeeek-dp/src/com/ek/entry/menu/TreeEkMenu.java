@@ -9,11 +9,11 @@ package com.ek.entry.menu;
 
 import java.util.List;
 
-public class TreeEKMenu {
+public class TreeEkMenu {
 	private String text;
 	private String href;
 	private int permsnId;
-	private List<TreeEKMenu> nodes;
+	private List<TreeEkMenu> nodes;
 	
 	public String getText() {
 		return text;
@@ -39,11 +39,11 @@ public class TreeEKMenu {
 		this.permsnId = permsnId;
 	}
 	
-	public List<TreeEKMenu> getNodes() {
+	public List<TreeEkMenu> getNodes() {
 		return nodes;
 	}
 	
-	public void setNodes(List<TreeEKMenu> nodes) {
+	public void setNodes(List<TreeEkMenu> nodes) {
 		this.nodes = nodes;
 	}
 }

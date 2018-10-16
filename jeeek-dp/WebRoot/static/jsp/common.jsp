@@ -11,3 +11,5 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/vuejs/vue-2.5.16-min.js"></script>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/common/EK.js"></script>
+

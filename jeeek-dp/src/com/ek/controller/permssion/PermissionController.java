@@ -6,12 +6,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ek.controller.commons.EKController;
+import com.ek.entry.commons.JSONMsg;
 import net.sf.json.JSONArray;
 
+import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ek.bo.commons.StaticConst;
@@ -31,9 +35,9 @@ import com.ek.services.user.UserService;
  */
 @Component
 @RequestMapping("/permission")
-public class PermissionController {
+public class PermissionController extends EKController {
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private Logger log = Logger.getLogger(this.getClass());
 	private PermissionService permService;
 	private ResourceService resouService;
 	private UserService userService;
@@ -101,7 +105,7 @@ public class PermissionController {
 		} catch (SQLException e) {
 			request.setAttribute(StaticConst.EK_RETURN_FLAG,
 					StaticConst.EK_RETURN_ERROR);
-			logger.error(e);
+			log.error(e);
 			e.printStackTrace();
 		}
 
@@ -148,7 +152,7 @@ public class PermissionController {
 			request.setAttribute(StaticConst.EK_RETURN_FLAG, StaticConst.EK_RETURN_SUCCESS);
 			request.setAttribute(StaticConst.PAGE_EK_PAGE_FLAG, StaticConst.PAGE_EK_PAGE_ACCESS);
 		} catch (SQLException e) {
-			logger.error(e);
+			log.error(e);
 			e.printStackTrace();
 		}
 		return mav;
@@ -182,7 +186,7 @@ public class PermissionController {
 			
 			request.setAttribute(StaticConst.PAGE_EK_PAGE_FLAG, StaticConst.PAGE_EK_PAGE_ACCESS);
 		} catch (SQLException e) {
-			logger.error(e);
+			log.error(e);
 			e.printStackTrace();
 		}
 		return mav;
@@ -206,7 +210,7 @@ public class PermissionController {
 			}
 			request.setAttribute(StaticConst.PAGE_EK_PAGE_FLAG, StaticConst.PAGE_EK_PAGE_ACCESS);
 		} catch (Exception e) {
-			logger.error(e);
+			log.error(e);
 			e.printStackTrace();
 		}
 		
@@ -238,7 +242,7 @@ public class PermissionController {
 				}
 			}
 		}
-		logger.info("-------"+permGrantList.size()+"--"+permList.size());
+		log.info("-------"+permGrantList.size()+"--"+permList.size());
 		request.setAttribute("userId", userId);
 		request.setAttribute("permGrantList", permGrantList);
 		request.setAttribute("permList", permList);
@@ -276,7 +280,7 @@ public class PermissionController {
 			request.setAttribute("rss", ja.toString());
 			request.setAttribute("perm", perm);
 		} catch (SQLException e) {
-			logger.error(e);
+			log.error(e);
 			e.printStackTrace();
 		}
 
@@ -301,13 +305,13 @@ public class PermissionController {
 			request.setAttribute("rss", ja.toString());
 			request.setAttribute("perm", new EkPermission());
 		} catch (SQLException e) {
-			logger.error(e);
+			log.error(e);
 			e.printStackTrace();
 		}
 
 		return mav;
 	}
-
+	
 	@Autowired
 	public void setPermService(PermissionService permService) {
 		this.permService = permService;

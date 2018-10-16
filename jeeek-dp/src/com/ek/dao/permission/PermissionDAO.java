@@ -30,7 +30,7 @@ public class PermissionDAO {
 
 	private Connection conn = null;
 	private ConnectionFactory connectionFactory;
-	Logger logger = Logger.getLogger(this.getClass());
+	Logger log = Logger.getLogger(this.getClass());
 	
 	@Autowired
 	public void setConnectionFactory(ConnectionFactory connectionFactory) {
@@ -122,7 +122,7 @@ public class PermissionDAO {
 		
 		int[] ri = ps.executeBatch();
 		for (int j = 0; j < ri.length; j++) {
-			logger.info(ri[j]);
+			log.info(ri[j]);
 		}
 		if (ri.length == pids.length) {
 			rbl = true;
@@ -139,7 +139,7 @@ public class PermissionDAO {
 			.append(logUserId).append(", M.UPDATETIME = DATE_FORMAT('").append(DateUtil.getCurrDateTimeStr())
 			.append("', '%Y-%m-%d %T') ")
 			.append("WHERE M.PERMSNID = ? AND USERID = ? ");
-		logger.info(sbSQL.toString());
+		log.info(sbSQL.toString());
 		conn = connectionFactory.getConnection("");
 		PreparedStatement ps = conn.prepareStatement(sbSQL.toString());
 		ps.setInt(2, Integer.parseInt(userId));
@@ -213,7 +213,7 @@ public class PermissionDAO {
 			.append("WHERE URPGM.VALIDFLAG = '1' AND URPGM.ROLEGROUPID IN ")
 			.append("(SELECT ROLEGROUPID FROM EK_USER_ROLE_GROUP_MAPPING URGM ")
 			.append("WHERE URGM.USERID = 4 AND URGM.VALIDFLAG = '1')) ");
-		logger.info(sbSQL.toString());
+		log.info(sbSQL.toString());
 		conn = connectionFactory.getConnection("");
 		PreparedStatement ps = conn.prepareStatement(sbSQL.toString());
 		ResultSet rs = ps.executeQuery();
@@ -222,6 +222,50 @@ public class PermissionDAO {
 		}
 		return list;
 	}
-
 	
+	/**
+	* 根据权限ID获取权限信息
+	* @param pId
+	* @Return: EkPermission
+	* @Author: Qin_HQing
+	* @Date: 2018/10/16 9:57
+	* @Description:
+	**/
+	public EkPermission getPerm(int pId) throws SQLException {
+		StringBuilder sbSQL = new StringBuilder();
+		sbSQL.append("SELECT * FROM EK_PERMISSION T WHERE T.PERMSNID = ? ");
+		EkPermission permission = null;
+		
+		conn = connectionFactory.getConnection("");
+		PreparedStatement pst = conn.prepareStatement(sbSQL.toString());
+		pst.setInt(1, pId);
+		ResultSet rs = pst.executeQuery();
+		List<EkPermission> list = this.transResult2Bean(rs);
+		if (!list.isEmpty()){
+			permission = list.get(0);
+		}
+		
+		return permission;
+	}
+	
+	private List<EkPermission> transResult2Bean(ResultSet rs) throws SQLException {
+		List<EkPermission> list = new ArrayList<>();
+		while (rs.next()){
+			EkPermission permission = new EkPermission();
+			permission.setPermsnId(rs.getInt("PERMSNID"));
+			permission.setPermsnName(rs.getString("PERMSNNAME"));
+			permission.setResourceId(rs.getInt("RESOURCEID"));
+			permission.setOperateId(rs.getInt("OPERATEID"));
+			permission.setCreateUserId(rs.getInt("CREATEUSERID"));
+			permission.setRemark(rs.getString("REMARK"));
+			permission.setCreateTime(rs.getTimestamp("CREATETIME"));
+			permission.setUpdateTime(rs.getTime("UPDATETIME"));
+			permission.setUpdateUserId(rs.getInt("UPDATEUSERID"));
+			permission.setValidFlag(rs.getString("VALIDFLAG"));
+			
+			list.add(permission);
+		}
+		
+		return list;
+	}
 }

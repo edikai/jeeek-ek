@@ -31,4 +31,6 @@ public class StaticConst {
 	
 	public final static String EK_RETURN_PAGE_PWD_ERROR = "登录失败，请检查你的用户名密码";
 	public final static String EK_RETURN_PAGE_PWD_INVALID = "登录失败，用户信息已失效";
+	
+	public final static String EK_RETURN_MSG_ERR_NOPARAM = "参数传递有误";
 }

@@ -4,13 +4,13 @@ import java.util.Date;
 
 /**
  * @包名   com.ek.entry.menu
- * @文件名 EKMenu.java
+ * @文件名 EkMenu.java
  * @作者   Qin_HQing
  * @创建日期 2015年5月27日
  * @版本 V 1.0
  * @描述
  */
-public class EKMenu {
+public class EkMenu {
 	
 	/** 主键*/
 	private int menuId;

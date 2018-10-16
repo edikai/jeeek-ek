@@ -1,9 +1,9 @@
-<%@page import="com.ek.entry.menu.EKMenu"%>
+<%@page import="com.ek.entry.menu.EkMenu"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
+		<%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-EKMenu menu = (EKMenu)request.getAttribute("menu");
+EkMenu menu = (EkMenu)request.getAttribute("menu");
 String ml = (String)request.getAttribute("menuList");
 String permLists = (String)request.getAttribute("permList");
 %>

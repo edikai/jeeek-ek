@@ -3,8 +3,7 @@ package com.ek.services.menu;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.ek.entry.menu.EKMenu;
-import com.ek.entry.menu.TreeEKMenu;
+import com.ek.entry.menu.TreeEkMenu;
 import com.ek.services.commons.EkService;
 
 /**
@@ -15,7 +14,7 @@ import com.ek.services.commons.EkService;
  * @版本 V 1.0
  * @描述
  */
-public abstract class MenuServiceI implements EkService{
+public interface MenuServiceI extends EkService{
 
 	/**
 	* 用于递归获取用户菜单
@@ -25,5 +24,7 @@ public abstract class MenuServiceI implements EkService{
 	* @Date: 2018/10/15 16:36
 	* @Description:
 	**/
-	public abstract List<TreeEKMenu> getUserMenuList(List<String> permList) throws SQLException;
+	List<TreeEkMenu> getUserMenuList(List<String> permList) throws SQLException;
+	
+	String getMenuUrl(Integer pId) throws SQLException;
 }
