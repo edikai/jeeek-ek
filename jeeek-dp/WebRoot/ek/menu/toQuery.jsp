@@ -13,7 +13,6 @@ String permLists = (String)request.getAttribute("permList");
 <head>
 	<base href="<%=basePath%>">
 	<title>菜单维护</title>
-	<script type="text/javascript" src="<%=path %>/js/jquery-1.9.1.js"></script>
 </head>
 	
 	<frameset cols="20%,80%" framespacing="0" frameborder="yes" border="1">

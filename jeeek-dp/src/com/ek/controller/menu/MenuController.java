@@ -13,6 +13,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import net.sf.json.util.PropertyFilter;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -213,8 +214,14 @@ public class MenuController extends EKController {
 			}
 			String menuUrl = this.menuService.getMenuUrl(pId);
 			
-			msg.setCode(StaticConst.EK_RETURN_SUCCESS);
-			msg.setData(menuUrl);
+			if (StringUtils.isNotEmpty(menuUrl)){
+				msg.setCode(StaticConst.EK_RETURN_SUCCESS);
+				msg.setData(menuUrl);
+			}else {
+				msg.setCode(StaticConst.EK_RETURN_NODATA);
+				msg.setMsg(StaticConst.EK_RETURN_MSG_NODATA);
+			}
+			
 			
 			JSONObject rt = JSONObject.fromObject(msg);
 			super.printTEXT(rt.toString(), response);

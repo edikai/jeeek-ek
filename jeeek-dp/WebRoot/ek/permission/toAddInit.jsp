@@ -15,7 +15,7 @@ EkPermission perm = (EkPermission)request.getAttribute("perm");
 	<base href="<%=basePath%>">
 	<title>新增权限</title>
 	<!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
-	<script type="text/javascript" src="<%=path %>/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="<%=path %>/static/js/jquery-1.9.1.js"></script>
 
 </head>
 <body>

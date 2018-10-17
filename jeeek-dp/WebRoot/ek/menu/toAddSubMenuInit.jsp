@@ -14,7 +14,7 @@ String parMenuId = (String)request.getAttribute("menuId");
 <head>
 	<base href="<%=basePath%>">
 	<title>新增菜单</title>
-	<script type="text/javascript" src="<%=path %>/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="<%=path %>/static/js/jquery-1.9.1.js"></script>
 </head>
 <body>
 	<%if(null != returnFlag) {

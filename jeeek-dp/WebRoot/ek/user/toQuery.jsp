@@ -15,8 +15,7 @@ List<EkUser> users = (List<EkUser>)request.getAttribute("users");
 <head>
 	<base href="<%=basePath%>">
 	<title>用户列表</title>
-	<link rel="stylesheet" type="text/css" href="<%=path %>/css/common/table.css">
-	<script type="text/javascript" src="<%=path %>/js/jquery-1.9.1.js"></script>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/common/table.css">
 </head>
 <body>
 	<%if(returnFlag.equals("1")) {%>

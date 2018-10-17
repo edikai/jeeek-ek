@@ -15,8 +15,8 @@ List permList = (List)request.getAttribute("permList");
 <head>
 	<base href="<%=basePath%>">
 	<title>权限列表</title>
-	<link rel="stylesheet" type="text/css" href="<%=path %>/css/common/table.css">
-	<script type="text/javascript" src="<%=path %>/js/jquery-1.9.1.js"></script>
+	<link rel="stylesheet" type="text/css" href="<%=path %>/static/css/common/table.css">
+
 </head>
 <body>
 	<%if(returnFlag.equals("1")) {%>
@@ -60,7 +60,7 @@ List permList = (List)request.getAttribute("permList");
 </body>
 <script type="text/javascript">
 	$(document).ready(function(){
-		
+		console.info("permission page");
 	});
 </script>
 </html>

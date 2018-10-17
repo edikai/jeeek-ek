@@ -89,7 +89,6 @@
 						data: msg,
 						onNodeSelected: function (event, data) {
 							var selectedNode = $('#treemenu').treeview('getSelected');
-							console.info(selectedNode)
 							var permsnId = selectedNode[0].permsnId;
 							getMenuUrl(permsnId);
 						}
@@ -108,7 +107,12 @@
 				url: path+'/menu/getMenuUrl.html',
 				data: 'permsnId='+permsnId,
 				success: function (msg) {
-					console.info(msg)
+					var d = JSON.parse(msg);
+					if(d.code == '1'){
+						$('#mainpage').load(path+d.data);
+					}else {//没有链接的菜单
+						//console.info(d.code+", "+d.msg);
+					}
 				}
 			});
 				

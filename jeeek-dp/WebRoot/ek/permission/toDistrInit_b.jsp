@@ -18,8 +18,8 @@ String userId = (String)request.getAttribute("userId");
 <head>
 	<base href="<%=basePath%>">
 	<title>分配权限</title>
-	<link rel="stylesheet" type="text/css" href="<%=path %>/css/common/table.css">
-	<script type="text/javascript" src="<%=path %>/js/jquery-1.9.1.js"></script>
+	<link rel="stylesheet" type="text/css" href="<%=path %>/static/css/common/table.css">
+	<script type="text/javascript" src="<%=path %>/static/js/jquery-1.9.1.js"></script>
 
 </head>
 <body>
