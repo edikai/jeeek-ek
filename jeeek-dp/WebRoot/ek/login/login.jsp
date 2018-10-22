@@ -23,11 +23,12 @@
 <form name="loginForm" action="${pageContext.request.contextPath}/xcom/login.html" method="post"
 	  class="form-horizontal loginForm" role="form">
 	<div id="loginForm">
-		<div class="form-group">
+		<div class="form-group has-feedback">
 			<label for="logName" class="col-sm-3 control-label" >
 				<h3>用户名</h3>
 			</label>
 			<div class="col-sm-9" style="text-align: center;">
+				<span class="glyphicon glyphicon-user form-control-feedback glyphicon-vertical"></span>
 				<input type="text" id="logName" name="logName" class="form-control"
 					   placeholder="Login Name" required autofocus onchange="userNameChanged()"
 					   v-model="logName"
@@ -35,11 +36,12 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group has-feedback">
 			<label for="passWord" class="col-sm-3 control-label">
 				<h3>密&nbsp;&nbsp;&nbsp;&nbsp;码</h3>
 			</label>
 			<div class="col-sm-9">
+				<span class="glyphicon glyphicon-lock form-control-feedback glyphicon-vertical"></span>
 				<input type="password" id="passWord" name="passWord" class="form-control"
 					   placeholder="PassWord" required autofocus onchange="pwdOnChanged()"
 					   v-model="passWord"
