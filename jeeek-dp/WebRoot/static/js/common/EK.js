@@ -43,6 +43,13 @@ EK.prototype.isEmpty = function (obj) {
 	return null == obj ? true : (obj.length <= 0 ? true : false);
 }
 
+EK.prototype.getContextPath = function () {
+	var pathName = document.location.pathname;
+	var index = pathName.substr(1).indexOf("/");
+	var path = pathName.substr(0,index+1);
+	return path;
+}
+
 
 
 
