@@ -13,6 +13,9 @@
 	<context:component-scan base-package="com.ek" />
 	<!-- 启动 spring 注解驱动 -->
 	<mvc:annotation-driven/>
+
+	<!-- 添加静态文件访问 -->
+	<mvc:default-servlet-handler/>
 	
 	<!-- 视图解析器 -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">

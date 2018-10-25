@@ -3,6 +3,7 @@ package com.ek.services.user;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.ek.bo.commons.StaticConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +20,11 @@ import com.ek.entry.user.User;
  * @版本 V 1.0
  */
 @Component
-public class UserService extends UserServiceI {
+public class UserService implements UserServiceI {
 
 	private UserDAO userDAO ;
 	public boolean add(EkUser user) throws SQLException {
+		user.setPassWord(StaticConst.EK_PWD_DEFAULT);
 		return this.userDAO.add(user);
 	}
 
@@ -35,7 +37,7 @@ public class UserService extends UserServiceI {
 	@Override
 	public List<?> getList(String[] colName, String[] colValue) throws SQLException {
 		StringBuffer sbSQL = new StringBuffer("")
-			.append("SELECT * FROM EK_USER WHERE VALIDFLAG = '1' ");
+			.append("SELECT * FROM EK_USER WHERE 1=1 ");
 		if (null != colName && colName.length > 0) {
 			for (int i = 0; i < colName.length; i++) {
 				sbSQL.append("AND ").append(colName[i]).append("='").append(colValue[i]).append("' ");
@@ -48,7 +50,9 @@ public class UserService extends UserServiceI {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<?> getList() throws SQLException {
-		List<Object> list = (List<Object>) this.getList(null, null);
+		String[] colName = {"VALIDFLAG"};
+		String[] colValue = {"1"};
+		List<Object> list = (List<Object>) this.getList(colName, colValue);
 		return list;
 	}
 
@@ -76,8 +80,20 @@ public class UserService extends UserServiceI {
 		return false;
 	}
 	
+	@Override
+	public boolean checkLogName(String logName) throws SQLException{
+		String[] colName = {"LOGNAME"};
+		String[] colValue = {logName};
+		List<Object> list = (List<Object>) this.getList(colName, colValue);
+		if (null != list && !list.isEmpty()){
+			return true;
+		}
+		return false;
+	}
+	
 	@Autowired
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+	
 }

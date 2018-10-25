@@ -8,6 +8,8 @@ package com.ek.bo.commons;
  * @描述
  */
 public class StaticConst {
+	
+	public final static String EK_PWD_DEFAULT = "123";
 
 	public final static String EK_VALIDFLAG_VALID = "1"; //有效标识 - 有效
 	
@@ -34,4 +36,8 @@ public class StaticConst {
 	
 	public final static String EK_RETURN_MSG_ERR_NOPARAM = "参数传递有误";
 	public final static String EK_RETURN_MSG_NODATA = "未查询到数据";
+	public final static String EK_RETURN_MSG_HASDATA = "查询到数据";
+	
+	public final static String EK_RETURN_MSG_LOGNAME_INVALID = "登陆名称不可用";
+	public final static String EK_RETURN_MSG_LOGNAME_VALID = "登陆名可用";
 }

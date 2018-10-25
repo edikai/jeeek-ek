@@ -12,6 +12,12 @@
 		<property name="password" value="itc123" />
 		<property name="initialSize" value="5" /><!-- 连接池启动时创建的链接数量 -->
 		<property name="maxActive" value="15" /> <!-- 同一时间从连接池分配的最多连接数 0表示无限制 -->
+
+		<property name="validationQuery" value="select 1" /> <!-- SQL查询，用来验证从连接池取出的链接是否可用 -->
+		<property name="testWhileIdle" value="true" /> <!-- 指明链接是否被空闲连接回收器（如果有）进行校验，如果校验失败，则链接从池中去除 -->
+		<property name="timeBetweenEvictionRunsMillis" value="300000" /> <!-- 在空闲链接回收器运行时期休眠的时间值，以毫秒为单位，一般比minEvictableIdleTimeMillis小 -->
+		<property name="numTestsPerEvictionRun" value="15" /> <!-- 在每次空闲链接回收器检查期间检查的链接数量，最好与maxActive值保持一致 -->
+		<property name="minEvictableIdleTimeMillis" value="3600000" /> <!-- 连接池中的链接，在时间段内（1000*60*60）一直空闲，则逐出连接池，以毫秒为单位 -->
 	</bean>
 	<!-- DBCP -->
 	<bean id="datasource_2" class="com.ek.conn.factory.DataSource">

@@ -4,11 +4,17 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.ek.controller.commons.EKController;
+import com.ek.entry.commons.JSONMsg;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ek.bo.commons.StaticConst;
@@ -24,9 +30,36 @@ import com.ek.services.user.UserService;
  */
 @Component
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends EKController {
 
 	Logger logger = Logger.getLogger(this.getClass());
+	
+	@RequestMapping(value = "/checkLogName/{logName}", method = RequestMethod.POST)
+	public ModelAndView checkLogName(@PathVariable String logName, HttpServletResponse response) {
+		JSONMsg msg = new JSONMsg();
+		try {
+			logger.info("[logName] : "+logName);
+			if (StringUtils.isEmpty(logName)){
+				msg.setCode(StaticConst.EK_RETURN_ERROR);
+				msg.setMsg(StaticConst.EK_RETURN_MSG_ERR_NOPARAM);
+				
+				super.printTEXT(msg.toString(), response);
+			}
+			boolean bl = this.userService.checkLogName(logName);
+			if (bl){
+				msg.setCode(StaticConst.EK_RETURN_SUCCESS); //存在数据，不可在添加该用户
+				msg.setMsg(StaticConst.EK_RETURN_MSG_LOGNAME_INVALID);
+			}else {
+				msg.setCode(StaticConst.EK_RETURN_NODATA);
+				msg.setMsg(StaticConst.EK_RETURN_MSG_LOGNAME_VALID);
+			}
+			super.printTEXT(msg.toString(), response);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/toQuery.html")

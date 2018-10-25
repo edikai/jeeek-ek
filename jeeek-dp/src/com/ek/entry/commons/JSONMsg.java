@@ -7,6 +7,8 @@
  **/
 package com.ek.entry.commons;
 
+import net.sf.json.JSONObject;
+
 public class JSONMsg {
 	
 	private String code;
@@ -35,5 +37,11 @@ public class JSONMsg {
 	
 	public void setData(Object data) {
 		this.data = data;
+	}
+	
+	@Override
+	public String toString() {
+		JSONObject json = JSONObject.fromObject(this);
+		return json.toString();
 	}
 }

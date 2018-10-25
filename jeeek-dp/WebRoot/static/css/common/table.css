@@ -5,13 +5,11 @@ body{
 }
 table{
 	margin: 0 auto;
-	text-align: center;
 	border-collapse: collapse;
-	border: 1 solid black;
 	width: 99%;
 }
 tr, th, td{
-	border: thin solid black;
+
 }
 
 .button{
